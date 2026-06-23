@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "name": "Root (Infrastructure)",
+      "path": ".",
+    },
+    {
+      "name": "Backend (Python API)",
+      "path": "mutation-generator-backend",
+    },
+    {
+      "name": "frontend",
+      "path": "frontend",
+    },
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": "${workspaceRoot:Backend (Python API)}/.venv/Scripts/python.exe",
+    "python.analysis.extraPaths": ["${workspaceRoot:Backend (Python API)}"],
+  },
+}
