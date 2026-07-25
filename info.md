@@ -6,24 +6,23 @@ A bioinformatics tool to search, analyze, and classify genetic variants by gene 
 
 ## Architecture
 
-```
+```text
 React Frontend (port 3000)
     |  POST /api/variants/process {geneName}
     v
-FastAPI Server -- src/api/main.py (port 8001)   <- active server
+FastAPI Server -- backend_server.py (port 8000)
     |
     |-- SQLite: clinvar.db
     |     |-- submissions  (variant x submitter x significance)
     |     |-- comparisons  (pairs of submissions for conflict analysis)
-    |     |-- mutations    (curated mutations table)
     |     `-- mondo_clinvar_relationships
     |
     `-- Mondo class (parses mondo.owl OWL file)
           `-- disease name -> MONDO ID lookup + ontology hierarchy
-
-FastAPI Server -- backend_server.py (port 8000)   <- richer query layer
-    `-- GET /variants/, /genes, /conditions, /submissions
 ```
+
+See `docs/superpowers/specs/2026-07-26-production-redesign-design.md` for the
+in-progress redesign (Postgres, consolidated single server, real data pipeline).
 
 ---
 
@@ -32,11 +31,9 @@ FastAPI Server -- backend_server.py (port 8000)   <- richer query layer
 | File                                              | Role                                                                |
 | ------------------------------------------------- | ------------------------------------------------------------------- |
 | frontend/src/App.js                               | Single React page: gene name input -> calls backend                 |
-| mutation-generator-backend/src/api/main.py        | Active FastAPI server on port 8001                                  |
-| mutation-generator-backend/src/backend_server.py  | Richer query API on port 8000                                       |
+| mutation-generator-backend/src/backend_server.py  | FastAPI server on port 8000 -- query API                            |
 | mutation-generator-backend/clinvar_setup/db.py    | DB class with ~20 methods for querying ClinVar SQLite               |
 | mutation-generator-backend/backend/app/mondo.py   | MONDO ontology parser: ancestor/descendant traversal, LCA algorithm |
-| mutation-generator-backend/src/models/mutation.py | Pydantic models: Mutation, MutationType enum                        |
 
 ---
 
@@ -77,20 +74,17 @@ Working:
 
 Half-baked / WIP:
 
-- /api/variants/process (port 8001) returns early -- echoes gene name only, actual DB query is dead code
-- Frontend shows no results -- just alert('Success!') after API call
+- Frontend doesn't call backend_server.py's endpoints yet -- just alert('Success!') after a request to a since-removed endpoint
 - import-clinvar-xml.py is empty -- data import pipeline is missing
+- "Similar genes" (via MONDO) is designed but not yet implemented -- see the redesign spec
 
 ---
 
 ## Running the App
 
 ```bash
-# Backend (port 8001 -- what the frontend calls)
+# Backend (port 8000)
 cd mutation-generator-backend
-uvicorn src.api.main:app --reload --port 8001
-
-# Backend (port 8000 -- richer query API)
 python src/backend_server.py
 
 # Frontend

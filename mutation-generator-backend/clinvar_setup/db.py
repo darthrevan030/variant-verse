@@ -10,28 +10,6 @@ class DB():
         self.db = sqlite3.connect('clinvar.db', timeout=20, check_same_thread=False)
         self.db.row_factory = sqlite3.Row
         self.cursor = self.db.cursor()
-        self.create_mutation_tables()
-
-    def create_mutation_tables(self):
-        self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS mutations (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                gene_name TEXT NOT NULL,
-                chromosome TEXT NOT NULL,
-                position INTEGER NOT NULL,
-                reference TEXT NOT NULL,
-                alternate TEXT NOT NULL,
-                mutation_type TEXT NOT NULL,
-                disease_id TEXT,
-                clinical_significance TEXT,
-                description TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        ''')
-        self.cursor.execute('''
-            CREATE INDEX IF NOT EXISTS idx_mutations_gene 
-            ON mutations(gene_name)
-        ''')
 
     def and_optimized_conflict_level(self):
         comparison_required = (
