@@ -22,18 +22,18 @@ FastAPI Server -- backend_server.py (port 8000)
 ```
 
 See `docs/superpowers/specs/2026-07-26-production-redesign-design.md` for the
-in-progress redesign (Postgres, consolidated single server, real data pipeline).
+in-progress redesign (consolidated single server, real data pipeline).
 
 ---
 
 ## Key Components
 
-| File                                              | Role                                                                |
-| ------------------------------------------------- | ------------------------------------------------------------------- |
-| frontend/src/App.js                               | Single React page: gene name input -> calls backend                 |
-| mutation-generator-backend/src/backend_server.py  | FastAPI server on port 8000 -- query API                            |
-| mutation-generator-backend/clinvar_setup/db.py    | DB class with ~20 methods for querying ClinVar SQLite               |
-| mutation-generator-backend/backend/app/mondo.py   | MONDO ontology parser: ancestor/descendant traversal, LCA algorithm |
+| File                                              | Role                                                                 |
+| -------------------------------------------------- | --------------------------------------------------------------------- |
+| frontend/src/App.js                                | Single React page: gene name input -> calls backend                   |
+| mutation-generator-backend/src/backend_server.py   | FastAPI server on port 8000 -- query API                              |
+| mutation-generator-backend/src/clinvar_setup/db.py | DB class with ~20 methods for querying ClinVar SQLite                 |
+| mutation-generator-backend/src/mondo/mondo.py      | MONDO ontology parser: ancestor/descendant traversal, LCA algorithm    |
 
 ---
 
